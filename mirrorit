@@ -1,0 +1,18 @@
+#!/nix/store/9ywr69qi622lrmx5nn88gk8jpmihy0dz-bash-4.4-p23/bin/bash
+
+repository_url="$1"
+repository_destination="$2"
+
+fail() {
+    echo >&2 "$*"
+    exit 1
+}
+
+if [ -d "$repository_destination" ]; then
+    cd "$repository_destination" || fail "could not cd to $repository_destination"
+
+    git fetch
+else
+    git clone --mirror "$repository_url" "$repository_destination"
+fi
+
