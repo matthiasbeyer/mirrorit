@@ -1,4 +1,4 @@
-#!/nix/store/9ywr69qi622lrmx5nn88gk8jpmihy0dz-bash-4.4-p23/bin/bash
+#!/usr/bin/env bash
 
 repository_url="$1"
 repository_destination="$2"
