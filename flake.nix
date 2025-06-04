@@ -16,7 +16,7 @@
       };
     in
     {
-      lib.mkLib = { pkgs, mirroritPackage }: let
+      lib.mkLib = { pkgs, mirroritPackage ? inputs.self.packages."${system}".mirrorit }: let
         mkMirror = {
           name,
           repo_url,
