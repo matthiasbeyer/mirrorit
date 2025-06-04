@@ -22,10 +22,12 @@
           repo_url,
           destination_path,
           enable ? true,
+          extraServiceAttrs ? {},
           timer ? true,
+          extraTimerAttrs ? {},
           ...
         }: {
-          systemd.services."mirrorit-${name}" = {
+          systemd.services."mirrorit-${name}" = pkgs.lib.attrsets.recursiveUpdate {
             inherit enable;
             description = "mirroring service for ${repo_url}";
 
@@ -34,9 +36,9 @@
             script = ''
               ${pkgs.bash}/bin/bash ${mirroritPackage}/bin/mirrorit "${repo_url}" "${destination_path}"
             '';
-          };
+          } extraServiceAttrs;
 
-          systemd.timers."mirrorit-${name}-timer" = {
+          systemd.timers."mirrorit-${name}-timer" = pkgs.lib.attrsets.recursiveUpdate {
             inherit enable;
 
             description = "trigger for mirroring service for ${repo_url}";
@@ -48,7 +50,7 @@
 
             requires = ["network.target"];
             wantedBy = ["timers.target"];
-          };
+          } extraTimerAttrs;
         };
       in
       {
