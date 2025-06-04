@@ -25,33 +25,29 @@
           timer ? true,
           ...
         }: {
-          service = {
-            "mirrorit-${name}" = {
-              inherit enable;
-              description = "mirroring service for ${repo_url}";
+          systemd.services."mirrorit-${name}" = {
+            inherit enable;
+            description = "mirroring service for ${repo_url}";
 
-              requires = ["network.target"];
+            requires = ["network.target"];
 
-              script = ''
-                ${pkgs.bash}/bin/bash ${mirroritPackage}/bin/mirrorit "${repo_url}" "${destination_path}"
-              '';
-            };
+            script = ''
+              ${pkgs.bash}/bin/bash ${mirroritPackage}/bin/mirrorit "${repo_url}" "${destination_path}"
+            '';
           };
 
-          timer = {
-            "mirrorit-${name}-timer" = {
-              inherit enable;
+          systemd.timers."mirrorit-${name}-timer" = {
+            inherit enable;
 
-              description = "trigger for mirroring service for ${repo_url}";
-              timerConfig = {
-                OnCalendar = "weekly";
-                Unit = "mirrorit-${name}.service";
-                RandomizedDelaySec = "1200";
-              };
-
-              requires = ["network.target"];
-              wantedBy = ["timers.target"];
+            description = "trigger for mirroring service for ${repo_url}";
+            timerConfig = {
+              OnCalendar = "weekly";
+              Unit = "mirrorit-${name}.service";
+              RandomizedDelaySec = "1200";
             };
+
+            requires = ["network.target"];
+            wantedBy = ["timers.target"];
           };
         };
       in
