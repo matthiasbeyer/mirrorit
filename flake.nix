@@ -6,8 +6,8 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
-  outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem (system: {
-      lib.mkLib = { pkgs, mirroritPackage ? inputs.self.packages."${system}".mirrorit }: let
+  outputs = inputs: {
+      lib.mkLib = { pkgs, mirroritPackage ? inputs.self.packages."${pkgs.system}".mirrorit }: let
         mkMirror = {
           name,
           repo_url,
@@ -49,7 +49,7 @@
           mkMirror
           ;
       };
-
+    } // inputs.flake-utils.lib.eachDefaultSystem (system: {
       packages = let
         pkgs = import inputs.nixpkgs {
           inherit system;
