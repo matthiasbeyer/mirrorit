@@ -25,7 +25,7 @@
             requires = ["network.target"];
 
             script = ''
-              ${pkgs.bash}/bin/bash ${mirroritPackage}/bin/mirrorit "${repo_url}" "${destination_path}"
+              ${pkgs.lib.getExe pkgs.bash} ${mirroritPackage}/bin/mirrorit "${repo_url}" "${destination_path}"
             '';
           } extraServiceAttrs;
 
