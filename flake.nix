@@ -30,7 +30,7 @@
           } extraServiceAttrs;
 
           systemd.timers."mirrorit-${name}-timer" = pkgs.lib.attrsets.recursiveUpdate {
-            inherit enable;
+            enable = timer;
 
             description = "trigger for mirroring service for ${repo_url}";
             timerConfig = {
