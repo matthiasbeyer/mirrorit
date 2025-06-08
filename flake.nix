@@ -6,16 +6,7 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
-  outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem (system:
-    let
-      pkgs = import inputs.nixpkgs {
-        inherit system;
-        overlays = let
-          selfOverlay = _: _: { } // inputs.self.packages."${system}";
-        in [ selfOverlay ];
-      };
-    in
-    {
+  outputs = inputs: inputs.flake-utils.lib.eachDefaultSystem (system: {
       lib.mkLib = { pkgs, mirroritPackage ? inputs.self.packages."${system}".mirrorit }: let
         mkMirror = {
           name,
@@ -59,7 +50,14 @@
           ;
       };
 
-      packages = rec {
+      packages = let
+        pkgs = import inputs.nixpkgs {
+          inherit system;
+          overlays = let
+            selfOverlay = _: _: { } // inputs.self.packages."${system}";
+          in [ selfOverlay ];
+        };
+      in rec {
         default = mirrorit;
 
         mirrorit = pkgs.writeShellApplication {
