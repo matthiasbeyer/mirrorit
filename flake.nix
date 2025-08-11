@@ -62,6 +62,7 @@
 
         mirrorit = pkgs.writeShellApplication {
           name = "mirrorit";
+          runtimeInputs = [ pkgs.git ];
           text = builtins.readFile ./mirrorit;
         };
       };
